@@ -4,37 +4,65 @@ import React, { useEffect, useState } from 'react';
 import ProductCard from '../../Components/ProductCard';
 
 const Home = () => {
-     const [pages ,setPages]=useState([])
-     let [currentPage ,setCurrentPage]=useState(0)
+    const [pages, setPages] = useState([])
+    let [currentPage, setCurrentPage] = useState(0)
+    const [search, setSearch] = useState("")
+    const [sort , setSort] =useState("highToLow")
+    const [category , setCategory] =useState("")
+    const [brand , setBrand] =useState("")
+    const [maxPrice , setMax]=useState('')
+    const [minPrice , setMin]=useState('')
+
+
+    const handlePrevious = async () => {
+        if (0 < currentPage) {
+            setCurrentPage(currentPage - 1)
+
+        }
+
+    }
+    const handleNext = async () => {
+        if (currentPage < pages.length - 1) {
+            setCurrentPage(currentPage + 1)
+
+        }
+
+    }
+    const handleClick = async (e) => {
+        setCurrentPage(e);
+
+    }
     const { status, data, refetch, error } = useQuery({
-        queryKey: ['product'],
+        queryKey: ['product', currentPage, search ,sort,category, brand ,maxPrice],
         queryFn: async () => {
-            const { data } = await axios.get(`http://localhost:3000/products/?currentPage=${currentPage}`)
+            const { data } = await axios.get(`http://localhost:3000/products/?currentPage=${currentPage}&search=${search}&sort=${sort}&category=${category}&brand=${brand}&maxPrice=${maxPrice}&minPrice=${minPrice}`)
             console.log(data)
             return data
         },
     })
     useEffect(() => {
         const fetchData = async () => {
-          try {
-            const {data} = await axios.get('http://localhost:3000/totalProducts');
-            // setTotalProducts(response.data.count);
-            const totalPage= Math.ceil(data.count/9)
-            let makePage = []
-            for (let index = 0; index < totalPage; index++) {
-                const a = parseInt(index)
-                makePage.push(a)
-                
+            try {
+                const { data } = await axios.get(`http://localhost:3000/totalProducts/?search=${search}&category=${category}&brand=${brand}&maxPrice=${maxPrice}&minPrice=${minPrice}`);
+                // setTotalProducts(response.data.count);
+                const totalPage = Math.ceil(data.count / 9)
+                let makePage = []
+                for (let index = 0; index < totalPage; index++) {
+                    const a = parseInt(index)
+                    makePage.push(a)
+
+                }
+                setPages(makePage)
+                console.log(totalPage); // Log the total products count
+            } catch (error) {
+                console.error('Error fetching data:', error);
             }
-           setPages(makePage)
-            console.log(totalPage); // Log the total products count
-          } catch (error) {
-            console.error('Error fetching data:', error);
-          }
         };
-    
+
         fetchData();
-      }, []);
+    }, [search , category,brand ,maxPrice]);
+    console.log(search);
+
     if (status === 'pending') {
         return <span>Loading...</span>
     }
@@ -42,58 +70,50 @@ const Home = () => {
     if (status === 'error') {
         return <span>Error: {error.message}</span>
     }
- const handlePrevious = ()=>{
-    if (0<currentPage) {
-      setCurrentPage(currentPage -1) 
-      refetch() 
+
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        setSearch(e.target.Search.value);
+
+    }
+    const handlePrice = (e) => {
+        const range =e.target.value;
+        if (range==="top") {
+           setMax("1500") 
+           setMin("800")
+        }
+        if (range==="mid") {
+           setMax("800") 
+           setMin("400")
+        }
+        if (range==="low") {
+           setMax("400") 
+           setMin("1")
+        }
+
     }
 
- }
- const handleNext = ()=>{
-    if (currentPage<pages.length-1) {
-      setCurrentPage(currentPage +1) 
-      refetch() 
-    }
-
- }
- const handleClick=(e)=>{
-  setCurrentPage(e);
-  refetch()
- }
-
-    console.log('Hello, world!', pages,currentPage );
+    console.log('Hello, world!', minPrice, maxPrice);
     return (
         <div>
-            <section className='mt-10 flex items-center justify-start gap-10'>
-                <div className="relative  w-1/3">
+            <section className='mt-3 mb-10 flex items-center justify-start gap-10'>
+                <div className="relative w-1/2">
 
-                    <input
-                        type="text"
-                        id="Search"
-                        placeholder="Search for..."
-                        className="w-full pl-3 pb-2 text-stone-950 rounded-md bg-white border-gray-200 py-2.5 pe-10 shadow-sm sm:text-sm"
-                    />
+                    <form action="" onSubmit={handleSubmit} >
+                       <div className='w-full flex gap-4'>
+                       <input
+                           
+                            type="text"
+                            name="Search"
+                            placeholder="Search for..."
+                            className="w-full  pl-3 pb-2 text-stone-950 rounded-md bg-white border-gray-200 py-2.5 pe-10 shadow-sm sm:text-sm"
+                        />
+                         <button type="submit" className='btn  btn-outline'>Search</button>
+                       </div>
+                      
+                        
+                    </form>
 
-                    <span className="absolute -top-3 inset-y-0 end-0 grid w-10 place-content-center">
-                        <button type="button" className="text-gray-600 hover:text-gray-700">
-                            <span className="sr-only">Search</span>
-
-                            <svg
-                                xmlns="http://www.w3.org/2000/svg"
-                                fill="none"
-                                viewBox="0 0 24 24"
-                                stroke-width="1.5"
-                                stroke="currentColor"
-                                className="h-4 w-4 font-bold"
-                            >
-                                <path
-                                    stroke-linecap="round"
-                                    stroke-linejoin="round"
-                                    d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z"
-                                />
-                            </svg>
-                        </button>
-                    </span>
                 </div>
                 <div className="flex gap-8 bg-slate-100 p-4 rounded-2xl">
                     <div className="relative">
@@ -127,7 +147,7 @@ const Home = () => {
                                     </header>
 
                                     <ul className="space-y-1 border-t border-gray-200 p-4">
-                                        <li className="cursor-pointer hover:text-xl">
+                                        <li onClick={()=>setSort("LowToHigh")} className="cursor-pointer hover:text-xl">
                                             <label htmlFor="FilterInStock" className="inline-flex items-center gap-2">
 
 
@@ -135,11 +155,18 @@ const Home = () => {
                                             </label>
                                         </li>
 
-                                        <li>
+                                        <li onClick={()=>setSort("highToLow")}>
                                             <label htmlFor="FilterPreOrder" className="inline-flex items-center gap-2">
 
 
                                                 <span className=" hover:text-xl font-medium text-gray-700"> High to Low </span>
+                                            </label>
+                                        </li>
+                                        <li onClick={()=>setSort("new")}>
+                                            <label htmlFor="FilterPreOrder" className="inline-flex items-center gap-2">
+
+
+                                                <span className=" hover:text-xl font-medium text-gray-700"> New products </span>
                                             </label>
                                         </li>
                                     </ul>
@@ -154,51 +181,54 @@ const Home = () => {
                     <h1 className="text-center text-white text-2xl font-bold">Categorization:</h1>
                     <div className="flex items-center justify- gap-10">
                         <div className='bg-slate-50 p-4 rounded-xl'>
-                            <label htmlFor="HeadlineAct" className="block text-sm font-medium text-gray-900"> Brand Name </label>
+                            <label htmlFor="HeadlineAct" className="block text-sm font-medium text-gray-900"> Category </label>
 
                             <select
+                                onChange={(e)=>setCategory(e.target.value)}
                                 name="HeadlineAct"
                                 id="HeadlineAct"
                                 className="mt-1.5 bg-slate-50  w-full rounded-lg border-2 p-2 border-gray-950 text-gray-700 sm:text-sm"
                             >
-                                <option value="">Please select</option>
-                                <option value="JM">John Mayer</option>
-                                <option value="SRV">Stevie Ray Vaughn</option>
-                                <option value="JH">Jimi Hendrix</option>
-                                <option value="BBK">B.B King</option>
-                                <option value="AK">Albert King</option>
+                                <option value= " ">Please select</option>
+                                <option value="Electronics">Electronics</option>
+                                <option value="Wearables">Wearables</option>
+                                <option value="Computers">Computers</option>
+                                <option value="Audio">Audio</option>
+                                <option value="Accessories">Accessories</option>
+                                <option value="Home Automation">Home Automation</option>
                             </select>
                         </div>
                         <div className='bg-slate-50 p-4 rounded-xl'>
                             <label htmlFor="HeadlineAct" className="block text-sm font-medium text-gray-900"> Brand Name </label>
 
                             <select
+                                onChange={(e)=>setBrand(e.target.value)}
                                 name="HeadlineAct"
                                 id="HeadlineAct"
                                 className="mt-1.5 bg-slate-50  w-full rounded-lg border-2 p-2 border-gray-950 text-gray-700 sm:text-sm"
                             >
                                 <option value="">Please select</option>
-                                <option value="JM">John Mayer</option>
-                                <option value="SRV">Stevie Ray Vaughn</option>
-                                <option value="JH">Jimi Hendrix</option>
-                                <option value="BBK">B.B King</option>
-                                <option value="AK">Albert King</option>
+                                <option value="SmartConnect">SmartConnect</option>
+                                <option value="ClickTech">ClickTech</option>
+                                <option value="VisionPro">VisionPro</option>
+                                <option value="GameForce">GameForce</option>
+                                <option value="TechTime">TechTime</option>
                             </select>
                         </div>
                         <div className='bg-slate-50 p-4 rounded-xl'>
-                            <label htmlFor="HeadlineAct" className="block text-sm font-medium text-gray-900"> Brand Name </label>
+                            <label htmlFor="HeadlineAct" className="block text-sm font-medium text-gray-900">Price Range ($) </label>
 
                             <select
+                                onChange={handlePrice}
                                 name="HeadlineAct"
                                 id="HeadlineAct"
                                 className="mt-1.5 bg-slate-50  w-full rounded-lg border-2 p-2 border-gray-950 text-gray-700 sm:text-sm"
                             >
                                 <option value="">Please select</option>
-                                <option value="JM">John Mayer</option>
-                                <option value="SRV">Stevie Ray Vaughn</option>
-                                <option value="JH">Jimi Hendrix</option>
-                                <option value="BBK">B.B King</option>
-                                <option value="AK">Albert King</option>
+                                <option value="top">1500-800</option>
+                                <option value="mid">800-400</option>
+                                <option value="low">400-1</option>
+                               
                             </select>
                         </div>
 
@@ -221,14 +251,14 @@ const Home = () => {
                 <div className="join grid-cols-2 mx-auto mt-16 flex justify-center mb-16">
                     <button onClick={handlePrevious} className="join-item btn btn-outline mr-1">Previous page</button>
                     <div className="">
-                            {
-                            pages.map((page ,i)=>(
-                                <button type='button' key={page} onClick={()=>handleClick(page)} className={`
-                                    btn btn-square ${currentPage != i?"bg-yellow-600" : " bg-white "} `}>{page + 1}</button>
+                        {
+                            pages.map((page, i) => (
+                                <button type='button' key={page} onClick={() => handleClick(page)} className={`
+                                    btn btn-square ${currentPage != i ? "bg-yellow-600" : " bg-white "} `}>{page + 1}</button>
                             ))
-                            }
-                       
-                      
+                        }
+
+
                     </div>
                     <button onClick={handleNext} className="join-item btn btn-outline">Next</button>
                 </div>
