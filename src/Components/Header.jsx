@@ -1,8 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { Link, NavLink } from 'react-router-dom';
+import { AuthContext } from '../Provider/AuthProvider';
 
 const Header = () => {
+    const {user , signOutUser}= useContext(AuthContext)
+    const link =<>
+    <li><NavLink to={"/"}>Home</NavLink></li>
+    <li><NavLink to={"/login"}>logIn</NavLink></li>
+    <li><NavLink to={"/Register"}>Register</NavLink></li>
+    </>
     return (
-        <div className="navbar bg-base-200 mx-auto rounded-xl">
+        <div className="navbar bg-primary bg-opacity-50 text-white mx-auto rounded-xl">
             <div className="navbar-start">
                 <div className="dropdown">
                     <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
@@ -22,36 +30,21 @@ const Header = () => {
                     <ul
                         tabIndex={0}
                         className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow">
-                        <li><a>Item 1</a></li>
-                        <li>
-                            <a>Parent</a>
-                            <ul className="p-2">
-                                <li><a>Submenu 1</a></li>
-                                <li><a>Submenu 2</a></li>
-                            </ul>
-                        </li>
-                        <li><a>Item 3</a></li>
+                       {link}
                     </ul>
                 </div>
                 <a className="btn btn-ghost text-xl">daisyUI</a>
             </div>
             <div className="navbar-center hidden lg:flex">
                 <ul className="menu menu-horizontal px-1">
-                    <li><a>Item 1</a></li>
-                    <li>
-                        <details>
-                            <summary>Parent</summary>
-                            <ul className="p-2">
-                                <li><a>Submenu 1</a></li>
-                                <li><a>Submenu 2</a></li>
-                            </ul>
-                        </details>
-                    </li>
-                    <li><a>Item 3</a></li>
+                  {link}
                 </ul>
             </div>
             <div className="navbar-end">
-                <a className="btn">Button</a>
+                {
+                    !user?<Link className='btn btn-outline' to={"/logIn"}>Log In</Link>:<button onClick={()=>signOutUser()} className=' btn btn-outline bg-red-600'>Log Out</button>
+                }
+               
             </div>
         </div>
     );

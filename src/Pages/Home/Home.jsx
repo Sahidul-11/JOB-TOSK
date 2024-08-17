@@ -96,8 +96,8 @@ const Home = () => {
     console.log('Hello, world!', minPrice, maxPrice);
     return (
         <div>
-            <section className='mt-3 mb-10 flex items-center justify-start gap-10'>
-                <div className="relative w-1/2">
+            <section className='mt-3 mb-10 flex flex-col lg:flex-row items-center justify-start gap-10'>
+                <div className="relative px-2 w-full lg:w-1/2">
 
                     <form action="" onSubmit={handleSubmit} >
                        <div className='w-full flex gap-4'>
@@ -177,9 +177,9 @@ const Home = () => {
 
 
                 </div>
-                <div className='w-1/2'>
+                <div className='w-full px-2 lg:w-1/2'>
                     <h1 className="text-center text-white text-2xl font-bold">Categorization:</h1>
-                    <div className="flex items-center justify- gap-10">
+                    <div className="flex items-center gap-3 lg:gap-10">
                         <div className='bg-slate-50 p-4 rounded-xl'>
                             <label htmlFor="HeadlineAct" className="block text-sm font-medium text-gray-900"> Category </label>
 
