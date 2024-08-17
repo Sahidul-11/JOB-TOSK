@@ -1,12 +1,13 @@
 import React from 'react';
 
-const ProductCard = () => {
+const ProductCard = ({product}) => {
     return (
         <div>
-            <div className="card bg-base-100 w-96 shadow-xl">
+            <div className="card bg-base-100 w-96 shadow-xl mx-auto">
                 <figure>
                     <img
-                        src="https://img.daisyui.com/images/stock/photo-1606107557195-0e29a4b5b4aa.webp"
+                        className='w-full h-64'
+                        src={product?.productImage}
                         alt="Shoes" />
                 </figure>
                 <div className="card-body">
