@@ -1,38 +1,43 @@
-- #. You may check first-
-    TechTide Frontend
-This is the frontend of the TechTide application, built using React.js.
+# Overview of nubi
 
-#Project Setup-
-Prerequisites:
-Node.js: Ensure you have Node.js installed on your machine.
-npm: Node Package Manager, comes with Node.js.
+by using this site user can Search ny kinds of products ...he can sort all of them according to  category , price Range , date , Brand Name ,,,
 
-#Installation:
-cmd
-cd\projects
-Clone the Repository:
+---
 
-bash
-git clone <repository-url>
-cd frontend
+**Website Name:** BloodBank
 
-#Install Dependencies:
+**Hosting Link:** [Hosting Live Site](https://serene-tarsier-78925d.netlify.app)
 
-bash
-npm install
+**Git Client Link:** [Git Client LInk](https://github.com/Sahidul-11/JOB-TOSK)
 
-#Run the Application:
+**Git Link -server:** [Git Server LInk ](https://github.com/Sahidul-11/Job-Task-servers)
 
-bash
-npm start
-The application will be available at http://localhost:5173.
 
-#Usage
-Search Functionality: Enter a product name in the search bar to search for specific products.
-Categorization: Filter products by brand, category, or price range.
-Sorting: Sort products by price (low to high, high to low) and by date added (newest first).
+---
 
-#Troubleshooting
-Failed to Fetch: Ensure the backend server is running and accessible at the URL specified in the .env file.
-Build Issues: Run npm run build to create an optimized production build.
-localhost
+## Installation
+
+Install my-project with npm
+
+**Clone the repository:**
+
+```bash
+  npm install
+  set env.local file
+  REACT_APP_API_KEY=your_api_key_here
+```
+
+
+## Features
+
+- Google Authintification
+- All device responsive
+- Mongodb Database
+- Node js
+
+---
+
+### Additional Points
+
+- to run the project Yo need to run  server site project  
+- then pserversite project link given up
