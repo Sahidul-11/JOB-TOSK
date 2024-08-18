@@ -35,7 +35,7 @@ const Home = () => {
     const { status, data, refetch, error } = useQuery({
         queryKey: ['product', currentPage, search ,sort,category, brand ,maxPrice],
         queryFn: async () => {
-            const { data } = await axios.get(`http://localhost:3000/products/?currentPage=${currentPage}&search=${search}&sort=${sort}&category=${category}&brand=${brand}&maxPrice=${maxPrice}&minPrice=${minPrice}`)
+            const { data } = await axios.get(`https://job-task-server-olive.vercel.app/products/?currentPage=${currentPage}&search=${search}&sort=${sort}&category=${category}&brand=${brand}&maxPrice=${maxPrice}&minPrice=${minPrice}`)
             console.log(data)
             return data
         },
@@ -43,7 +43,7 @@ const Home = () => {
     useEffect(() => {
         const fetchData = async () => {
             try {
-                const { data } = await axios.get(`http://localhost:3000/totalProducts/?search=${search}&category=${category}&brand=${brand}&maxPrice=${maxPrice}&minPrice=${minPrice}`);
+                const { data } = await axios.get(`https://job-task-server-olive.vercel.app/totalProducts/?search=${search}&category=${category}&brand=${brand}&maxPrice=${maxPrice}&minPrice=${minPrice}`);
                 // setTotalProducts(response.data.count);
                 const totalPage = Math.ceil(data.count / 9)
                 let makePage = []
