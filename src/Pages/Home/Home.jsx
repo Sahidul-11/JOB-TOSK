@@ -244,7 +244,7 @@ const Home = () => {
 
                 <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-10 w-full bg-white py-10 px-6 rounded-2xl'>
                     {
-                        data.map(product => <ProductCard key={product._id} product={product}></ProductCard>)
+                     data.length>0? data.map(product => <ProductCard key={product._id} product={product}></ProductCard>): <div className='text-center text-3xl w-full lg:col-span-3 font-bold text-slate-900 animate-bounce'>No Data Found</div>
                     }
 
                 </div>
