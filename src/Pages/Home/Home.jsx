@@ -6,6 +6,7 @@ import ProductCard from '../../Components/ProductCard';
 const Home = () => {
     const [pages, setPages] = useState([])
     let [currentPage, setCurrentPage] = useState(0)
+    const [call , setCall]=useState(true)
     const [search, setSearch] = useState("")
     const [sort , setSort] =useState("highToLow")
     const [category , setCategory] =useState("")
@@ -30,10 +31,11 @@ const Home = () => {
     }
     const handleClick = async (e) => {
         setCurrentPage(e);
+        
 
     }
     const { status, data, refetch, error } = useQuery({
-        queryKey: ['product', currentPage, search ,sort,category, brand ,maxPrice],
+        queryKey: ['product', currentPage, call ,sort,category, brand ,maxPrice],
         queryFn: async () => {
             const { data } = await axios.get(`https://job-task-server-olive.vercel.app/products/?currentPage=${currentPage}&search=${search}&sort=${sort}&category=${category}&brand=${brand}&maxPrice=${maxPrice}&minPrice=${minPrice}`)
             console.log(data)
@@ -60,11 +62,11 @@ const Home = () => {
         };
 
         fetchData();
-    }, [search , category,brand ,maxPrice]);
+    }, [call , category,brand ,maxPrice]);
     console.log(search);
 
     if (status === 'pending') {
-        return <span>Loading...</span>
+        return <div className="w-16 mx-auto mt-36 h-16 border-4 border-dashed rounded-full animate-spin dark:border-violet-600"></div>
     }
 
     if (status === 'error') {
@@ -73,7 +75,8 @@ const Home = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault()
-        setSearch(e.target.Search.value);
+        setCall(!call);
+       
 
     }
     const handlePrice = (e) => {

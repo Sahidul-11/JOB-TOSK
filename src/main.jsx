@@ -11,6 +11,7 @@ import Home from './Pages/Home/Home';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import LogIn from './Pages/LogIn/LogIn';
 import Register from './Pages/Register/Register';
+import Error from './Pages/Error/Error';
 
 const queryClient = new QueryClient()
 
@@ -18,7 +19,8 @@ const router = createBrowserRouter([
   {
     path: "/",
     element: <LayOut></LayOut>,
-    children: [
+    errorElement :<Error></Error>,
+    children:[
       {
         path: "/",
         element: <Home></Home>
