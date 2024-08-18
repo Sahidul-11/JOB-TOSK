@@ -31,7 +31,6 @@ const Home = () => {
     }
     const handleClick = async (e) => {
         setCurrentPage(e);
-        
 
     }
     const { status, data, refetch, error } = useQuery({
@@ -76,7 +75,6 @@ const Home = () => {
     const handleSubmit = (e) => {
         e.preventDefault()
         setCall(!call);
-       
 
     }
     const handlePrice = (e) => {
@@ -105,7 +103,8 @@ const Home = () => {
                     <form action="" onSubmit={handleSubmit} >
                        <div className='w-full flex gap-4'>
                        <input
-                           
+                           onChange={(e)=>setSearch(e.target.value)}
+                           defaultValue={search}
                             type="text"
                             name="Search"
                             placeholder="Search for..."
